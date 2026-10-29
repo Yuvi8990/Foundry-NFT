@@ -1,0 +1,11 @@
+{
+    "name": "Toy Pomeranian",
+    "description": "An adorable, fluffy pure white Toy Pomeranian puppy!",
+    "image": "ipfs://bafkreieadlx33lrukitgkaufhzs3e2zwrq67iwqffjzg2f72ifsmyoq4qi",
+    "attributes": [
+        {
+            "trait_type": "cuteness",
+            "value": 100
+        }
+    ]
+}
