@@ -176,9 +176,9 @@ The SVGs are Base64-encoded once at deploy time and stored. The JSON is built an
 ---
 
 ## 📐 Architecture
-
+ 
 ### 🧭 Contract flow
-
+ 
 ```mermaid
 flowchart TD
     subgraph BasicNFT ["🐶 BasicNFT.sol (IPFS)"]
@@ -186,7 +186,7 @@ flowchart TD
         A2 --> A3["_safeMint(msg.sender, s_tokenCounter)"]
         A3 --> A4["tokenURI(tokenId) returns the ipfs:// link"]
     end
-
+ 
     subgraph MoodNFT ["🐉 MoodNFT.sol (on-chain SVG)"]
         B1["DeployMoodNFT reads both SVG files"] --> B2["svgToImageURI converts each to a Base64 data URI"]
         B2 --> B3["Constructor stores both URIs on-chain"]
@@ -196,20 +196,20 @@ flowchart TD
         B5 -- "Owner or approved" --> B7["Toggle mood: Lazy or Angry"]
         B7 --> B8["tokenURI builds JSON with the chosen SVG, then Base64-encodes it"]
     end
-
+ 
     classDef step fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#422006
     classDef fail fill:#fee2e2,stroke:#dc2626,color:#450a0a
     classDef done fill:#dcfce7,stroke:#16a34a,color:#052e16
-
+ 
     class A1,A2,A3,B1,B2,B3,B4,B7 step
     class B5 decision
     class B6 fail
     class A4,B8 done
 ```
-
+ 
 ### 🎭 Mood state machine
-
+ 
 ```mermaid
 stateDiagram-v2
     [*] --> Lazy: mintNFT
@@ -285,7 +285,7 @@ foundry-NFT/
 │   ├── angry_dragon.svg            # Mood.Angry artwork
 │   ├── toy_pom.jpg                 # Pomeranian image (pinned to IPFS)
 │   ├── toy_pom.json                # Pomeranian metadata (pinned to IPFS)
-│   ├── sleeping_uri.txt            # saved Base64 URI, sleeping dragon
+│   ├── lazy_uri.txt                # saved Base64 URI, lazy dragon
 │   └── angry_uri.txt               # saved Base64 URI, angry dragon
 ├── src/
 │   ├── BasicNFT.sol                # ERC-721 using IPFS links
