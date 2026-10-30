@@ -1,0 +1,130 @@
+<svg width="1200" height="340" viewBox="0 0 1200 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B1020"/>
+      <stop offset="0.55" stop-color="#17113A"/>
+      <stop offset="1" stop-color="#0B1020"/>
+    </linearGradient>
+
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F472B6"/>
+      <stop offset="0.5" stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+
+    <linearGradient id="dragonSkin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4F4F5"/>
+      <stop offset="1" stop-color="#C9D7E2"/>
+    </linearGradient>
+
+    <linearGradient id="dragonShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#312E81"/>
+    </linearGradient>
+
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="340" rx="28" fill="url(#bg)"/>
+
+  <!-- subtle ambient glows -->
+  <circle cx="160" cy="260" r="120" fill="#F472B6" opacity="0.10" filter="url(#softGlow)"/>
+  <circle cx="1060" cy="260" r="120" fill="#34D399" opacity="0.10" filter="url(#softGlow)"/>
+
+  <!-- left abstract art -->
+  <g transform="translate(40,18)">
+    <!-- base body -->
+    <path d="M120 192C55 175 28 125 56 92C82 62 128 66 164 98C196 127 214 171 204 206L169 210C149 198 130 192 120 192Z" fill="url(#dragonSkin)"/>
+    <path d="M186 184C266 156 282 108 246 76C212 46 160 56 126 94C103 122 93 154 95 180L130 204L186 184Z" fill="url(#dragonShade)"/>
+
+    <!-- wing -->
+    <path d="M118 118C78 90 58 58 82 32C110 5 162 18 198 54C176 74 148 101 118 118Z" fill="#C7D2FE" opacity="0.82"/>
+    <path d="M178 130C223 112 257 96 290 116C314 130 311 166 286 196C247 186 208 168 178 130Z" fill="#9CA3AF" opacity="0.75"/>
+
+    <!-- face -->
+    <circle cx="220" cy="138" r="12" fill="#0F172A"/>
+    <circle cx="255" cy="148" r="7" fill="#FB7185" opacity="0.7"/>
+    <path d="M228 138L262 124L250 170" fill="#F5F5F5" opacity="0.8"/>
+
+    <!-- horns -->
+    <path d="M206 98L186 62L217 100L206 98Z" fill="url(#gold)"/>
+    <path d="M230 94L254 60L243 100L230 94Z" fill="url(#gold)"/>
+  </g>
+
+  <!-- right abstract art -->
+  <g transform="translate(860,18)">
+    <!-- base body -->
+    <path d="M120 192C55 175 28 125 56 92C82 62 128 66 164 98C196 127 214 171 204 206L169 210C149 198 130 192 120 192Z" fill="url(#dragonSkin)"/>
+    <path d="M186 184C266 156 282 108 246 76C212 46 160 56 126 94C103 122 93 154 95 180L130 204L186 184Z" fill="url(#dragonShade)"/>
+
+    <!-- wing -->
+    <path d="M118 118C78 90 58 58 82 32C110 5 162 18 198 54C176 74 148 101 118 118Z" fill="#C7D2FE" opacity="0.82"/>
+    <path d="M178 130C223 112 257 96 290 116C314 130 311 166 286 196C247 186 208 168 178 130Z" fill="#9CA3AF" opacity="0.75"/>
+
+    <!-- face -->
+    <circle cx="220" cy="138" r="12" fill="#0F172A"/>
+    <circle cx="255" cy="148" r="7" fill="#FB7185" opacity="0.7"/>
+    <path d="M228 138L262 124L250 170" fill="#F5F5F5" opacity="0.8"/>
+
+    <!-- horns -->
+    <path d="M206 98L186 62L217 100L206 98Z" fill="url(#gold)"/>
+    <path d="M230 94L254 60L243 100L230 94Z" fill="url(#gold)"/>
+  </g>
+
+  <!-- text -->
+  <g>
+    <text x="600" y="146" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="76" font-weight="800" fill="#F8FAFC" letter-spacing="1">
+      Foundry NFT
+    </text>
+
+    <rect x="470" y="170" width="260" height="5" rx="2.5" fill="url(#accent)"/>
+
+    <text x="600" y="220" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="28" font-weight="700" fill="#F8FAFC">
+      <tspan fill="#F472B6">IPFS</tspan>
+      <tspan fill="#F8FAFC"> BasicNFT</tspan>
+      <tspan fill="#F8FAFC"> + </tspan>
+      <tspan fill="#FBBF24">On-Chain SVG</tspan>
+      <tspan fill="#F8FAFC"> MoodNFT</tspan>
+    </text>
+
+    <!-- badges row -->
+    <g transform="translate(300,245)">
+      <g>
+        <rect x="0" y="0" width="110" height="32" rx="16" fill="#1F2937" stroke="#475569" stroke-width="1"/>
+        <text x="55" y="21" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">Solidity</text>
+      </g>
+
+      <g transform="translate(120,0)">
+        <rect x="0" y="0" width="95" height="32" rx="16" fill="#1F2937" stroke="#475569" stroke-width="1"/>
+        <text x="47.5" y="21" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">Foundry</text>
+      </g>
+
+      <g transform="translate(235,0)">
+        <rect x="0" y="0" width="185" height="32" rx="16" fill="#1F2937" stroke="#475569" stroke-width="1"/>
+        <text x="92.5" y="21" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#F8FAFC">OpenZeppelin v5.0.2</text>
+      </g>
+
+      <g transform="translate(440,0)">
+        <rect x="0" y="0" width="84" height="32" rx="16" fill="#1F2937" stroke="#475569" stroke-width="1"/>
+        <text x="42" y="21" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">IPFS</text>
+      </g>
+
+      <g transform="translate(544,0)">
+        <rect x="0" y="0" width="100" height="32" rx="16" fill="#1F2937" stroke="#475569" stroke-width="1"/>
+        <text x="50" y="21" text-anchor="middle" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">MIT License</text>
+      </g>
+    </g>
+  </g>
+</svg>
