@@ -1,6 +1,6 @@
 -include .env
 
-.PHONY: all test clean deploy fund help install snapshot format anvil zktest
+.PHONY: all test clean deploy fund help install snapshot format anvil zktest deployMood deployMoodNFT mint mintMoodNft mintMoodNFT flipMoodNft flipMoodNFT
 
 DEFAULT_ANVIL_KEY := 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 DEFAULT_ZKSYNC_LOCAL_KEY := 0x7726827caac94a7f9e1b160f7ea819f172f7b6f9d2a97f992c38edeab82d4110
@@ -40,16 +40,16 @@ deploy:
 	@forge script script/DeployBasicNFT.s.sol:DeployBasicNFT $(NETWORK_ARGS)
 
 mint:
-	@forge script script/Interactions.s.sol:MintBasicNFT ${NETWORK_ARGS}
+	@forge script script/Interactions.s.sol:MintBasicNFT $(NETWORK_ARGS)
 
-deployMood:
-	@forge script script/DeployMoodNft.s.sol:DeployMoodNFT $(NETWORK_ARGS)
+deployMood deployMoodNFT:
+	@forge script script/DeployMoodNFT.s.sol:DeployMoodNFT $(NETWORK_ARGS)
 
-mintMoodNft:
-	@forge script script/Interactions.s.sol:MintMoodNft $(NETWORK_ARGS)
+mintMoodNft mintMoodNFT:
+	@forge script script/Interactions.s.sol:MintMoodNFT $(NETWORK_ARGS)
 
-flipMoodNft:
-	@forge script script/Interactions.s.sol:FlipMoodNft $(NETWORK_ARGS)
+flipMoodNft flipMoodNFT:
+	@forge script script/Interactions.s.sol:FlipMoodNFT $(NETWORK_ARGS)
 
 zkdeploy: 
 	@forge create src/OurToken.sol:OurToken --rpc-url http://127.0.0.1:8011 --private-key $(DEFAULT_ZKSYNC_LOCAL_KEY) --legacy --zksync
