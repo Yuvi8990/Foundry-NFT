@@ -203,25 +203,21 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    subgraph DeployPhase ["🚀 Deploy time"]
-        D1["📖 Read both SVGs<br/>vm.readFile"] --> D2["🔐 Base64 + data URI<br/>svgToImageURI"]
-        D2 --> D3["🧱 Constructor stores<br/>both URIs on-chain"]
-    end
+    D1["📖 Read both SVGs<br/>vm.readFile"] --> D2["🔐 Base64 + data URI<br/>svgToImageURI"]
+    D2 --> D3["🧱 Constructor stores<br/>both URIs on-chain"]
+    D3 --> M1["🪙 mintNFT<br/>mood = Lazy"]
+    M1 --> F{"flipMood:<br/>owner or approved?"}
+    F -- "No" --> R["❌ Revert<br/>MoodNFT__CantFlipMoodIfNotOwner"]
+    F -- "Yes" --> T["🔄 Toggle mood<br/>Lazy or Angry"]
+    T --> U["🖼️ tokenURI<br/>builds JSON, Base64-encodes"]
 
-    subgraph UsePhase ["🎮 Using the NFT"]
-        M1["🪙 mintNFT<br/>mood = Lazy"] --> F{"flipMood:<br/>owner or approved?"}
-        F -- "No" --> R["❌ Revert<br/>MoodNFT__CantFlipMoodIfNotOwner"]
-        F -- "Yes" --> T["🔄 Toggle mood<br/>Lazy or Angry"]
-        T --> U["🖼️ tokenURI<br/>builds JSON, Base64-encodes"]
-    end
-
-    D3 --> M1
-
+    classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#2e1065
     classDef step fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#422006
     classDef fail fill:#fee2e2,stroke:#dc2626,color:#450a0a
     classDef done fill:#dcfce7,stroke:#16a34a,color:#052e16
-    class D1,D2,D3,M1,T step
+    class D1,D2,D3 deploy
+    class M1,T step
     class F decision
     class R fail
     class U done
