@@ -1,11 +1,18 @@
-<h1 align="center">🐉 Foundry NFT: IPFS <code>BasicNFT</code> &amp; On-Chain SVG <code>MoodNFT</code></h1>
+<p align="center">
+  <img src="img/Banner.svg" alt="Foundry NFT: IPFS BasicNFT and on-chain SVG MoodNFT" width="100%" />
+</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Solidity-%5E0.8.34-363636?style=for-the-badge&logo=solidity" alt="Solidity" />
-  <img src="https://img.shields.io/badge/Foundry-Forge%20%7C%20Anvil%20%7C%20Cast-FFDB1C?style=for-the-badge" alt="Foundry" />
-  <img src="https://img.shields.io/badge/OpenZeppelin-v5.0.2-4E5EE4?style=for-the-badge&logo=openzeppelin" alt="OpenZeppelin" />
-  <img src="https://img.shields.io/badge/IPFS-Pinata-65C2CB?style=for-the-badge&logo=ipfs" alt="IPFS" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
+  <b>Two ERC-721s, two ways to store an image:</b><br />
+  off-chain on IPFS, or fully on-chain as a Base64 SVG that changes with a mood.
+</p>
+
+<p align="center">
+  <a href="#-overview">🎯 Overview</a> &nbsp;·&nbsp;
+  <a href="#-preview">📸 Preview</a> &nbsp;·&nbsp;
+  <a href="#-architecture">📐 Architecture</a> &nbsp;·&nbsp;
+  <a href="#-tests">🧪 Tests</a> &nbsp;·&nbsp;
+  <a href="#-quick-start">⚡ Quick Start</a>
 </p>
 
 <p align="center">
@@ -161,7 +168,8 @@ The SVGs are Base64-encoded once at deploy time and stored. The JSON is built an
 │        |                                                         │
 │        v                                                         │
 │ abi.encodePacked( JSON text + imageURI )                         │
-│   {"name":"MoodNFT","attributes":[..],"image":"<imageURI>"}      │
+│   {"name": "MoodNFT", "description": "...",                      │
+│    "attributes": [...], "image": "<imageURI>"}                   │
 │        |                                                         │
 │        |  Base64.encode(...)                                     │
 │        v                                                         │
@@ -176,40 +184,51 @@ The SVGs are Base64-encoded once at deploy time and stored. The JSON is built an
 ---
 
 ## 📐 Architecture
- 
-### 🧭 Contract flow
- 
+
+### 🐶 BasicNFT flow
+
+```mermaid
+flowchart LR
+    A["🧑 User<br/>mintNft(uri)"] --> B["💾 Save URI<br/>s_tokenIdToUri"]
+    B --> C["🪙 _safeMint<br/>to msg.sender"]
+    C --> D["🔗 tokenURI()<br/>returns ipfs:// link"]
+
+    classDef step fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
+    classDef done fill:#dcfce7,stroke:#16a34a,color:#052e16
+    class A,B,C step
+    class D done
+```
+
+### 🐉 MoodNFT flow
+
 ```mermaid
 flowchart TD
-    subgraph BasicNFT ["🐶 BasicNFT.sol (IPFS)"]
-        A1["mintNft(tokenUri)"] --> A2["Store tokenUri in s_tokenIdToUri"]
-        A2 --> A3["_safeMint(msg.sender, s_tokenCounter)"]
-        A3 --> A4["tokenURI(tokenId) returns the ipfs:// link"]
+    subgraph DeployPhase ["🚀 Deploy time"]
+        D1["📖 Read both SVGs<br/>vm.readFile"] --> D2["🔐 Base64 + data URI<br/>svgToImageURI"]
+        D2 --> D3["🧱 Constructor stores<br/>both URIs on-chain"]
     end
- 
-    subgraph MoodNFT ["🐉 MoodNFT.sol (on-chain SVG)"]
-        B1["DeployMoodNFT reads both SVG files"] --> B2["svgToImageURI converts each to a Base64 data URI"]
-        B2 --> B3["Constructor stores both URIs on-chain"]
-        B3 --> B4["mintNFT sets the mood to Lazy"]
-        B4 --> B5{"flipMood called"}
-        B5 -- "Not owner or approved" --> B6["Revert: MoodNFT__CantFlipMoodIfNotOwner"]
-        B5 -- "Owner or approved" --> B7["Toggle mood: Lazy or Angry"]
-        B7 --> B8["tokenURI builds JSON with the chosen SVG, then Base64-encodes it"]
+
+    subgraph UsePhase ["🎮 Using the NFT"]
+        M1["🪙 mintNFT<br/>mood = Lazy"] --> F{"flipMood:<br/>owner or approved?"}
+        F -- "No" --> R["❌ Revert<br/>MoodNFT__CantFlipMoodIfNotOwner"]
+        F -- "Yes" --> T["🔄 Toggle mood<br/>Lazy or Angry"]
+        T --> U["🖼️ tokenURI<br/>builds JSON, Base64-encodes"]
     end
- 
+
+    D3 --> M1
+
     classDef step fill:#e0e7ff,stroke:#4f46e5,color:#1e1b4b
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#422006
     classDef fail fill:#fee2e2,stroke:#dc2626,color:#450a0a
     classDef done fill:#dcfce7,stroke:#16a34a,color:#052e16
- 
-    class A1,A2,A3,B1,B2,B3,B4,B7 step
-    class B5 decision
-    class B6 fail
-    class A4,B8 done
+    class D1,D2,D3,M1,T step
+    class F decision
+    class R fail
+    class U done
 ```
- 
+
 ### 🎭 Mood state machine
- 
+
 ```mermaid
 stateDiagram-v2
     [*] --> Lazy: mintNFT
@@ -285,7 +304,7 @@ foundry-NFT/
 │   ├── angry_dragon.svg            # Mood.Angry artwork
 │   ├── toy_pom.jpg                 # Pomeranian image (pinned to IPFS)
 │   ├── toy_pom.json                # Pomeranian metadata (pinned to IPFS)
-│   ├── lazy_uri.txt                # saved Base64 URI, lazy dragon
+│   ├── sleeping_uri.txt            # saved Base64 URI, sleeping dragon
 │   └── angry_uri.txt               # saved Base64 URI, angry dragon
 ├── src/
 │   ├── BasicNFT.sol                # ERC-721 using IPFS links
