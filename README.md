@@ -300,7 +300,7 @@ foundry-NFT/
 │   ├── angry_dragon.svg            # Mood.Angry artwork
 │   ├── toy_pom.jpg                 # Pomeranian image (pinned to IPFS)
 │   ├── toy_pom.json                # Pomeranian metadata (pinned to IPFS)
-│   ├── sleeping_uri.txt            # saved Base64 URI, sleeping dragon
+│   ├── lazy_uri.txt                # saved Base64 URI, lazy dragon
 │   └── angry_uri.txt               # saved Base64 URI, angry dragon
 ├── src/
 │   ├── BasicNFT.sol                # ERC-721 using IPFS links
