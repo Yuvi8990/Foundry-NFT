@@ -3,7 +3,6 @@
 pragma solidity ^0.8.34;
 
 import {ERC721} from "@openzeppelin/token/ERC721/ERC721.sol";
-import {Base64} from "@openzeppelin/utils/Base64.sol";
 
 contract BasicNFT is ERC721 {
     uint256 private s_tokenCounter;

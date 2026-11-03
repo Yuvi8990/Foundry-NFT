@@ -33,8 +33,10 @@
 7. [🧪 Tests](#-tests)
 8. [📁 Project Structure](#-project-structure)
 9. [⚡ Quick Start](#-quick-start)
-10. [🙏 Acknowledgements](#-acknowledgements)
-11. [📄 License](#-license)
+10. [🧠 Deep Concepts](#-deep-concepts)
+11. [⚠️ Limitations](#️-limitations)
+12. [🙏 Acknowledgements](#-acknowledgements)
+13. [📄 License](#-license)
 
 ---
 
@@ -276,14 +278,12 @@ Unit tests cover isolated functions and Base64 conversion. Integration tests run
 | :--- | :--- | :--- |
 | `BasicNFTtest.t.sol` | `testNameIsCorrect` | Deploys via script, compares the hashed `name()` to `"Doggy"` |
 | `BasicNFTtest.t.sol` | `testCanMintAndHaveABalance` | Mints as `USER`; checks `balanceOf(USER) == 1` and `tokenURI(0) == TOY_POM` |
-| `DeployMoodNFTtest.t.sol` | `testConvertSvgToUri` | Checks `svgToImageURI()` output for a small `<svg>` string |
+| `DeployMoodNFTtest.t.sol` | `testConvertSvgToUri` | Reads `angry_dragon.svg` via `vm.readFile`, runs `svgToImageURI()`, asserts the output matches the expected Base64 Data URI |
 | `MoodNFTtest.t.sol` | `testViewTokenURI` | Mints token `0` as `USER` and logs `tokenURI(0)` |
 | `MoodNftIntegrationTest.t.sol` | `testViewTokenURIIntegration` | Deploys with the real dragon SVGs and logs `tokenURI(0)` |
-| `MoodNftIntegrationTest.t.sol` | `testFlipTokenToAngry` | Mints, calls `flipMood(0)`, checks the URI changed |
+| `MoodNftIntegrationTest.t.sol` | `testFlipTokenToAngry` | Mints, calls `flipMood(0)`, asserts `tokenURI(0)` matches the Angry dragon JSON via `keccak256` hash comparison |
 
 > 💡 Solidity can't compare strings with `==`, so the tests compare `keccak256` hashes of the packed bytes instead.
-
-> 🚧 More tests are on the way.
 
 ---
 
@@ -364,6 +364,38 @@ make deployMood ARGS="--network sepolia"
 make mintMoodNft ARGS="--network sepolia"
 make flipMoodNft ARGS="--network sepolia"
 ```
+
+---
+
+## 🧠 Deep Concepts
+
+### 1. 💸 The Storage Cost Wall
+
+Storing a 100 KB image on Ethereum requires ~3,200 storage slots at 20,000 gas each — totalling **64 million gas**, which exceeds the capacity of two full Ethereum blocks. This fundamental constraint is why NFT images are stored off-chain (IPFS) or encoded as lightweight SVG vector code rather than raw pixel data.
+
+### 2. 🪆 The Two-Layer Data URI (Russian Doll Encoding)
+
+`MoodNFT.tokenURI()` returns a **Data URI inside a Data URI**. The outer layer is a Base64-encoded JSON metadata document (`data:application/json;base64,...`), and inside that JSON's `"image"` field sits another Base64-encoded SVG (`data:image/svg+xml;base64,...`). Base64 encoding is essential because raw SVG contains double quotes and angle brackets that would break the enclosing JSON parser — a problem known as **quote clashing**.
+
+### 3. 🔗 Why `abi.encodePacked` Instead of `abi.encode`
+
+`abi.encode` pads every argument to 32 bytes with zeroes (required for cross-contract ABI calls), which would corrupt human-readable text with null bytes. `abi.encodePacked` strips all padding and concatenates raw bytes tightly — making it the correct choice for building JSON strings, SVG URIs, and any text that must remain parseable by off-chain clients.
+
+---
+
+## ⚠️ Limitations
+
+### 1. 🔓 No Access Control on `mintNFT()`
+
+Both `BasicNFT.mintNft()` and `MoodNFT.mintNFT()` are `public` with no restrictions. Anyone can mint unlimited tokens for free. A production contract would add supply caps, allowlists, or payment requirements.
+
+### 2. ⛽ Higher Deploy Gas for MoodNFT
+
+Because `MoodNFT` stores two full Base64-encoded SVG strings in contract storage at deploy time, its deployment transaction costs significantly more gas than `BasicNFT` (which only stores a lightweight counter). On mainnet with complex artwork, this cost can become non-trivial.
+
+### 3. 📌 IPFS Pinning Dependency (BasicNFT)
+
+`BasicNFT` stores only an IPFS CID on-chain. If the file is unpinned from all IPFS nodes (e.g., the Pinata subscription expires), the metadata and image become unretrievable — even though the token itself still exists on Ethereum. The on-chain record proves ownership, but the art it points to can vanish.
 
 ---
 

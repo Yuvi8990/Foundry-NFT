@@ -38,9 +38,6 @@ contract MoodNftIntegrationTest is Test {
 
         console.log(moodNft.tokenURI(0));
 
-        assertEq(
-            keccak256(abi.encodePacked(moodNft.tokenURI(0))),
-            keccak256(abi.encodePacked(ANGRY_SVG_URI))
-        );
+        assertEq(keccak256(abi.encodePacked(moodNft.tokenURI(0))), keccak256(abi.encodePacked(ANGRY_SVG_URI)));
     }
 }
